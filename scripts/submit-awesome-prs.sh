@@ -1,36 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ENTRY='### Agent instruction tools
-
-- [agentchecker](https://github.com/moisesvalero/agentchecker) - CLI (`npx agentchecker`) that detects and fixes contradictions between `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/*.mdc`, and GitHub Copilot instructions.
-
-'
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 # --- awesome-cursorrules ---
+# Contributor PRs cannot add external README listings (readme/no-contributor-external-listing).
+# Submit a rule file; maintainers curate README entries.
 rm -rf /tmp/awesome-cursorrules
 gh repo fork PatrickJS/awesome-cursorrules --clone=true --remote=false /tmp/awesome-cursorrules
 cd /tmp/awesome-cursorrules
 git checkout -b add-agentchecker
-python3 - <<'PY'
-from pathlib import Path
-readme = Path("README.md").read_text()
-needle = "## Directories\n"
-insert = """### Agent instruction tools
-
-- [agentchecker](https://github.com/moisesvalero/agentchecker) - CLI (`npx agentchecker`) that detects and fixes contradictions between `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/*.mdc`, and GitHub Copilot instructions.
-
-"""
-if "agentchecker" not in readme:
-    readme = readme.replace(needle, insert + needle, 1)
-    Path("README.md").write_text(readme)
-PY
-git add README.md
-git commit -m "docs: add agentchecker to agent instruction tools"
+cp "$REPO_ROOT/scripts/awesome-cursorrules-agent-instruction-alignment.mdc" \
+  rules/agent-instruction-alignment-cursorrules-prompt-file.mdc
+git add rules/agent-instruction-alignment-cursorrules-prompt-file.mdc
+git commit -m "docs: add agent instruction alignment rule for agentchecker"
 git push -u origin add-agentchecker
 gh pr create --repo PatrickJS/awesome-cursorrules \
-  --title "docs: add agentchecker CLI for rule alignment" \
-  --body "Adds [agentchecker](https://github.com/moisesvalero/agentchecker) — zero-install CLI that scans AGENTS.md, CLAUDE.md, Cursor rules, and Copilot instructions for contradictions and fixes them."
+  --title "docs: add agent instruction alignment rule" \
+  --body "Adds a Cursor rule for keeping agent instruction files aligned across AGENTS.md, CLAUDE.md, Cursor rules, and Copilot instructions. Related: [agentchecker](https://github.com/moisesvalero/agentchecker)."
 
 echo "PR cursorrules: $(gh pr list --repo PatrickJS/awesome-cursorrules --head moisesvalero:add-agentchecker --json url -q '.[0].url')"
 

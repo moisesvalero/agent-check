@@ -17,6 +17,7 @@ describe('cli e2e', () => {
         [
           cliEntry,
           '--check-only',
+          '--local-only',
           '--project-dir',
           path.join(fixturesDir, 'cursor-claude-conflict'),
         ],
@@ -28,7 +29,13 @@ describe('cli e2e', () => {
   it('exits 0 on --check-only when aligned', async () => {
     const { stdout } = await execFileAsync(
       'node',
-      [cliEntry, '--check-only', '--project-dir', path.join(fixturesDir, 'copilot-agents-ok')],
+      [
+        cliEntry,
+        '--check-only',
+        '--local-only',
+        '--project-dir',
+        path.join(fixturesDir, 'copilot-agents-ok'),
+      ],
       { cwd: packageRoot },
     );
     expect(stdout).toContain('No contradictions');

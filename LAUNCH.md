@@ -24,6 +24,6 @@
 
 ## Follow-up PRs
 
-- [awesome-cursorrules #316](https://github.com/PatrickJS/awesome-cursorrules/pull/316) — pending review
+- [awesome-cursorrules #316](https://github.com/PatrickJS/awesome-cursorrules/pull/316) — CI passing, pending maintainer review
 - [awesome-ai-agents #1131](https://github.com/e2b-dev/awesome-ai-agents/pull/1131) — pending review
 - [awesome-ai-coding-tools #444](https://github.com/ai-for-developers/awesome-ai-coding-tools/pull/444) — pending review
