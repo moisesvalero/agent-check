@@ -58,8 +58,7 @@
         copy: '© 2026 AGENTCHECKER // MADE BY',
         docs: 'Docs',
         npm: `v${pkgVersion}`,
-        license: 'PolyForm NC license',
-        commercial: 'Commercial use',
+        license: 'MIT License',
         support: 'Support',
       },
     },
@@ -98,8 +97,7 @@
         copy: '© 2026 AGENTCHECKER // HECHO POR',
         docs: 'Docs',
         npm: `v${pkgVersion}`,
-        license: 'Licencia PolyForm NC',
-        commercial: 'Uso comercial',
+        license: 'Licencia MIT',
         support: 'Apoyar',
       },
     },
@@ -506,10 +504,6 @@
           href={licenseUrl}
           target="_blank"
           rel="noreferrer">{t.footer.license}</a
-        >
-        ·
-        <a class="portfolio-link" href="mailto:info@moisesvalero.es"
-          >{t.footer.commercial}</a
         >
       </span>
     </div>

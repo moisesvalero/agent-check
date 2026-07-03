@@ -32,7 +32,7 @@
     "agents-md",
     "cli"
   ],
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "MIT",
   "engines": {
     "node": ">=20"
   },
