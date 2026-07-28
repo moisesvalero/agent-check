@@ -23,7 +23,7 @@
     "lint-staged": "^15.5.2",
     "oxlint": "^0.16.11",
     "prettier": "^3.9.6",
-    "prettier-plugin-svelte": "^3.4.0"
+    "prettier-plugin-svelte": "^4.1.1"
   },
   "lint-staged": {
     "*.{ts,js,svelte}": [
