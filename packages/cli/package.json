@@ -42,7 +42,7 @@
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
-    "@types/node": "^22.15.21",
+    "@types/node": "^26.1.2",
     "oxlint": "^0.16.11",
     "prettier": "^3.9.6",
     "tsx": "^4.19.4",
