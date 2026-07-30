@@ -19,7 +19,7 @@ test('toggle de idioma cambia textos visibles', async ({ page }) => {
   await toggle.click();
 
   await expect(toggle).toHaveText('EN');
-  await expect(page.getByText('v0.1.8 en npm')).toBeVisible();
+  await expect(page.getByText(/v\d+\.\d+\.\d+ en npm/)).toBeVisible();
   await expect(page.locator('.hero-subtitle')).toContainText(
     /Escanea AGENTS\.md/,
   );
