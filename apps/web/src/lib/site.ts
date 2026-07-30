@@ -1,6 +1,6 @@
 /** Configuración central de SEO, GEO y AEO para la landing. */
 const SITE_URL = 'https://agentcheck.moisesvalero.es';
-export const PKG_VERSION = '0.1.8';
+export const PKG_VERSION = '0.2.0';
 
 export const siteName = 'agentchecker';
 const authorName = 'Moisés Valero';
@@ -52,7 +52,13 @@ export const faqsEn: FaqItem[] = [
   {
     question: 'What AI agent files does agentchecker support?',
     answer:
-      'agentchecker supports AGENTS.md (shared), CLAUDE.md (Claude Code), .cursor/rules/ (Cursor), .github/copilot-instructions.md (GitHub Copilot), .codex/config.toml (Codex App), .gemini/gemini.md (Antigravity), .opencode.json (OpenCode), .windsurfrules (Windsurf), .clinerules (Cline/Roo), and .aider.conf.yml (Aider). It also scans global config files in ~/.claude/, ~/.cursor/rules/, ~/.codex/, and ~/.config/opencode/.',
+      'agentchecker supports AGENTS.md (shared), CLAUDE.md and .claude/rules/*.md (Claude Code), .cursor/rules/*.mdc (Cursor), .github/copilot-instructions.md (GitHub Copilot), .codex/config.toml (Codex App), .gemini/gemini.md (Antigravity), .opencode.json (OpenCode), .windsurfrules (Windsurf), .clinerules (Cline/Roo), and .aider.conf.yml (Aider). It also scans global config files in ~/.claude/, ~/.cursor/rules/, ~/.codex/, and ~/.config/opencode/.',
+  },
+  {
+    question:
+      'Can agentchecker symlink rule files to AGENTS.md or audit package.json?',
+    answer:
+      "Yes! In v0.2.0+, run 'npx agentchecker --symlink' to replace tool-specific rules with relative symlinks to AGENTS.md. Run 'npx agentchecker --audit-deps' to audit rule claims against installed package.json dependencies and lockfiles.",
   },
   {
     question: 'What contradictions does agentchecker detect?',
@@ -85,7 +91,13 @@ export const faqsEs: FaqItem[] = [
   {
     question: '¿Qué archivos de agentes IA soporta agentchecker?',
     answer:
-      'agentchecker soporta AGENTS.md (compartido), CLAUDE.md (Claude Code), .cursor/rules/ (Cursor), .github/copilot-instructions.md (GitHub Copilot), .codex/config.toml (Codex), .gemini/gemini.md (Antigravity), .opencode.json (OpenCode), .windsurfrules (Windsurf), .clinerules (Cline/Roo) y .aider.conf.yml (Aider). También lee configuraciones globales en ~/.claude/, ~/.cursor/rules/, ~/.codex/ y ~/.config/opencode/.',
+      'agentchecker soporta AGENTS.md (compartido), CLAUDE.md y .claude/rules/*.md (Claude Code), .cursor/rules/*.mdc (Cursor), .github/copilot-instructions.md (GitHub Copilot), .codex/config.toml (Codex), .gemini/gemini.md (Antigravity), .opencode.json (OpenCode), .windsurfrules (Windsurf), .clinerules (Cline/Roo) y .aider.conf.yml (Aider). También lee configuraciones globales en ~/.claude/, ~/.cursor/rules/, ~/.codex/ y ~/.config/opencode/.',
+  },
+  {
+    question:
+      '¿Puede agentchecker crear symlinks a AGENTS.md o auditar el package.json?',
+    answer:
+      "¡Sí! En v0.2.0+, ejecuta 'npx agentchecker --symlink' para reemplazar reglas propietarias con enlaces simbólicos hacia AGENTS.md. Ejecuta 'npx agentchecker --audit-deps' para comprobar si las reglas coinciden con las dependencias instaladas en tu package.json.",
   },
   {
     question: '¿Qué contradicciones detecta agentchecker?',
