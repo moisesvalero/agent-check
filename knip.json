@@ -1,12 +1,14 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreDependencies": ["lint-staged"],
+  "ignoreExportsUsedInFile": true,
   "workspaces": {
     "packages/cli": {
       "entry": ["src/cli.ts"],
       "project": ["src/**/*.ts", "tests/**/*.ts"]
     },
     "apps/web": {
-      "entry": ["src/routes/**/+{page,layout,server}.{svelte,ts}"],
+      "entry": ["src/routes/**/+{page,layout,server}.{svelte,ts}", "src/lib/site.ts"],
       "project": ["src/**/*.{ts,svelte}"]
     }
   }
