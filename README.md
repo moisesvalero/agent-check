@@ -186,6 +186,8 @@ Options:
   --dry-run       Show contradictions and preview without writing
   --check-only    Exit 1 if contradictions exist (CI mode)
   --local-only    Scan only project files, skip global home configs
+  --symlink       Replace tool-specific rule files with symlinks to AGENTS.md
+  --audit-deps    Audit rules against installed package.json dependencies
   -y, --yes       Apply recommended fixes without prompts
   -a, --agent     Limit scan to agents: cursor, claude, copilot, shared
   --project-dir   Project directory to scan (default: cwd)
@@ -379,6 +381,8 @@ Opciones:
   --dry-run       Muestra contradicciones y previsualiza cambios sin escribir
   --check-only    Sale con código 1 si existen contradicciones (modo CI)
   --local-only    Escanea solo archivos del proyecto, sin configs globales del home
+  --symlink       Reemplaza archivos propietarios por symlinks apuntando a AGENTS.md
+  --audit-deps    Audita reglas contra las dependencias instaladas en package.json
   -y, --yes       Aplica las soluciones recomendadas de forma automática
   -a, --agent     Limita el análisis a: cursor, claude, copilot, shared
   --project-dir   Directorio a escanear (por defecto: cwd)

@@ -15,7 +15,7 @@ export const AGENT_FILE_PATTERNS: AgentFilePattern[] = [
   {
     agent: 'claude',
     kind: 'tool-specific',
-    patterns: ['CLAUDE.md', '.claude/CLAUDE.md'],
+    patterns: ['CLAUDE.md', '.claude/CLAUDE.md', '.claude/rules/*.md'],
   },
   {
     agent: 'cursor',

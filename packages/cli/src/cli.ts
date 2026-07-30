@@ -12,6 +12,8 @@ import { planFixes } from './fix/plan-fixes.js';
 import { applyFixes, previewFixes } from './fix/apply-fixes.js';
 import { renderContradictions, renderFoundFiles } from './ui/render-report.js';
 import { confirmApplyChanges, promptFixContradictions } from './ui/prompt-resolutions.js';
+import { auditDependencies } from './compare/audit-deps.js';
+import { createSymlinksToShared } from './fix/symlink-fixes.js';
 import { normalizeAgentFilter } from './scan/agent-map.js';
 import {
   EXIT_CONTRADICTIONS,
@@ -29,6 +31,8 @@ function parseCliOptions(argv: string[]): CliOptions {
       'dry-run': { type: 'boolean', default: false },
       'check-only': { type: 'boolean', default: false },
       'local-only': { type: 'boolean', default: false },
+      symlink: { type: 'boolean', default: false },
+      'audit-deps': { type: 'boolean', default: false },
       yes: { type: 'boolean', short: 'y', default: false },
       verbose: { type: 'boolean', short: 'v', default: false },
       agent: { type: 'string', short: 'a', multiple: true },
@@ -48,6 +52,8 @@ Options:
   --dry-run       Show contradictions and preview without writing
   --check-only    Exit 1 if contradictions exist (CI mode)
   --local-only    Scan only project files, skip global home configs
+  --symlink       Replace tool-specific rule files with symlinks to AGENTS.md
+  --audit-deps    Audit rules against installed package.json dependencies
   -y, --yes       Apply recommended fixes without prompts
   -a, --agent     Limit scan to agents: cursor, claude, copilot, shared
   --project-dir   Project directory to scan (default: cwd)
@@ -75,6 +81,8 @@ Options:
     dryRun: Boolean(values['dry-run']),
     checkOnly: Boolean(values['check-only']),
     localOnly: Boolean(values['local-only']),
+    symlink: Boolean(values.symlink),
+    auditDeps: Boolean(values['audit-deps']),
     yes: Boolean(values.yes),
     verbose: Boolean(values.verbose),
     agents,
@@ -122,6 +130,32 @@ export async function runCli(argv: string[]): Promise<number> {
   const localFiles = files.filter((f) => f.kind !== 'global');
 
   const facts = extractFacts(files);
+
+  if (options.symlink) {
+    const symlinkResults = createSymlinksToShared(localFiles, options.cwd);
+    console.log(pc.cyan('\nSymlinking tool-specific rules to AGENTS.md:'));
+    for (const res of symlinkResults) {
+      if (res.symlinkCreated) {
+        console.log(
+          `  ${pc.green('✓')} Symlinked ${path.relative(options.cwd, res.targetPath)} -> AGENTS.md`,
+        );
+      } else {
+        console.log(
+          `  ${pc.red('✗')} Failed to symlink ${path.relative(options.cwd, res.targetPath)}: ${res.error}`,
+        );
+      }
+    }
+    return EXIT_OK;
+  }
+
+  const mismatches = auditDependencies(facts, options.cwd);
+  if (mismatches.length > 0) {
+    console.log(pc.yellow('\nRule vs. Workspace Dependency Mismatches:'));
+    for (const m of mismatches) {
+      console.log(`  ${pc.yellow('⚠')} ${m.message}`);
+    }
+  }
+
   let contradictions = applyRecommendations(findContradictions(facts), facts);
 
   if (contradictions.length > 0) {

@@ -1,5 +1,5 @@
 #!/bin/sh
-pnpm exec lint-staged
-pnpm run check
-pnpm test
-pnpm agent-check
+npx pnpm exec lint-staged
+npx pnpm run check
+npx pnpm test
+npx pnpm agent-check

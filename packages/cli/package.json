@@ -1,6 +1,6 @@
 {
   "name": "agentchecker",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "Fix contradictions between AI agent instruction files in 2 seconds.",
   "type": "module",
   "main": "./dist/cli.js",

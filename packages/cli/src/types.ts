@@ -53,6 +53,14 @@ export type FileChange = {
   newText: string;
 };
 
+export type AuditMismatch = {
+  category: FactCategory;
+  ruleValue: string;
+  expectedDependency: string;
+  files: string[];
+  message: string;
+};
+
 export type CliOptions = {
   cwd: string;
   dryRun: boolean;
@@ -61,6 +69,8 @@ export type CliOptions = {
   yes: boolean;
   verbose: boolean;
   agents: AgentId[] | null;
+  symlink: boolean;
+  auditDeps: boolean;
 };
 
 export const EXIT_OK = 0;
