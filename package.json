@@ -19,7 +19,7 @@
   "packageManager": "pnpm@10.12.1",
   "devDependencies": {
     "husky": "^9.1.7",
-    "knip": "^5.50.5",
+    "knip": "^6.29.0",
     "lint-staged": "^15.5.2",
     "oxlint": "^0.16.11",
     "prettier": "^3.9.6",
