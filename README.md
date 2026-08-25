@@ -7,6 +7,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/agentchecker"><img src="https://img.shields.io/npm/v/agentchecker?color=00ff41&labelColor=131313&style=flat-square" alt="npm version"></a>
+  <a href="https://github.com/moisesvalero/agentchecker"><img src="https://img.shields.io/badge/AI%20Rules-Aligned-00ff41?style=flat-square&logo=git&logoColor=white" alt="AI Rules Aligned"></a>
   <a href="https://github.com/moisesvalero/agentchecker/blob/main/LICENSE"><img src="https://img.shields.io/github/license/moisesvalero/agentchecker?color=3b82f6&labelColor=131313&style=flat-square" alt="license"></a>
   <a href="https://github.com/moisesvalero/agentchecker/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/moisesvalero/agentchecker/ci.yml?branch=main&color=00ff41&labelColor=131313&style=flat-square" alt="CI status"></a>
   <a href="https://agentcheck-rho.vercel.app"><img src="https://img.shields.io/badge/website-agentcheck--rho.vercel.app-00ff41?labelColor=131313&style=flat-square" alt="landing page"></a>
@@ -192,21 +193,8 @@ Options:
   --local-only    Scan only project files, skip global home configs
   --symlink       Replace tool-specific rule files with symlinks to AGENTS.md
   --init          Initialize AGENTS.md and link all agent tools
-  --audit-deps    Audit rules against installed package.json dependencies
-  -y, --yes       Apply recommended fixes without prompts
-  -a, --agent     Limit scan to agents: cursor, claude, copilot, shared
-  --project-dir   Project directory to scan (default: cwd)
-  -v, --verbose   Verbose output
-  -h, --help      Show help
-
-Usage:
-  npx agentchecker [options]
-
-Options:
-  --dry-run       Show contradictions and preview without writing
-  --check-only    Exit 1 if contradictions exist (CI mode)
-  --local-only    Scan only project files, skip global home configs
-  --symlink       Replace tool-specific rule files with symlinks to AGENTS.md
+  --unify         Merge all local agent files into AGENTS.md and symlink tools
+  --badge         Output markdown/HTML badge for your project README
   --audit-deps    Audit rules against installed package.json dependencies
   -y, --yes       Apply recommended fixes without prompts
   -a, --agent     Limit scan to agents: cursor, claude, copilot, shared
@@ -407,6 +395,8 @@ Opciones:
   --local-only    Escanea solo archivos del proyecto, sin configs globales del home
   --symlink       Reemplaza archivos propietarios por symlinks apuntando a AGENTS.md
   --init          Inicializa AGENTS.md y enlaza todas las herramientas
+  --unify         Fusiona todos los archivos en AGENTS.md y enlaza herramientas
+  --badge         Muestra el badge Markdown/HTML para el README de tu proyecto
   --audit-deps    Audita reglas contra las dependencias instaladas en package.json
   -y, --yes       Aplica las soluciones recomendadas de forma automática
   -a, --agent     Limita el análisis a: cursor, claude, copilot, shared

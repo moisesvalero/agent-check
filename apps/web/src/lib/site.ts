@@ -1,6 +1,6 @@
 /** Configuración central de SEO, GEO y AEO para la landing. */
 const SITE_URL = 'https://agentcheck.moisesvalero.es';
-export const PKG_VERSION = '0.2.0';
+export const PKG_VERSION = '0.3.0';
 
 export const siteName = 'agentchecker';
 const authorName = 'Moisés Valero';

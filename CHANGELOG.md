@@ -4,7 +4,31 @@ All notable changes to this project are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [0.3.0] - 2026-08-25
+
+### Added
+
+- `--unify` command: intelligently merge all local proprietary rule files into a master `AGENTS.md` and replace them with relative symlinks.
+- `--badge` command: output markdown and HTML snippets for the official "AI Rules Aligned" badge.
+- Official GitHub Action (`action.yml`) for zero-config CI integration (`uses: moisesvalero/agentchecker@main`).
+- `--init` command: initialize a canonical `AGENTS.md` and link all supported AI tools.
+- Intelligent negation detection (`isMatchNegated`) across sentences and parenthesized lists to eliminate false positives.
+- `language` rule category detection (`spanish` vs `english`).
+- Test runner dependency auditing (`vitest` vs `jest`).
+
+### Fixed
+
+- Consolidated multi-replacement line fixes atomically in diff preview and file writing.
+- Resolved all dependency vulnerabilities (Vite 8, Vitest 4, SvelteKit, cookie override).
+- Fixed peer dependency compatibility with TypeScript 5.9 and SvelteKit.
+
+## [0.2.0] - 2026-06-28
+
+### Added
+
+- `--symlink` flag to link tool-specific rule files to `AGENTS.md`.
+- `--audit-deps` flag to check instruction claims against `package.json` dependencies.
+- Added support for Antigravity, OpenCode, Windsurf, Cline/Roo, and Aider.
 
 ## [0.1.8] - 2026-06-19
 

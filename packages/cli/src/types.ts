@@ -72,6 +72,8 @@ export type CliOptions = {
   agents: AgentId[] | null;
   symlink: boolean;
   init: boolean;
+  unify: boolean;
+  badge: boolean;
   auditDeps: boolean;
 };
 

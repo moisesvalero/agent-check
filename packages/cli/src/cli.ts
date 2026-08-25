@@ -14,6 +14,7 @@ import { renderContradictions, renderFoundFiles } from './ui/render-report.js';
 import { confirmApplyChanges, promptFixContradictions } from './ui/prompt-resolutions.js';
 import { auditDependencies } from './compare/audit-deps.js';
 import { createSymlinksToShared, initProjectAgents } from './fix/symlink-fixes.js';
+import { unifyAgentFiles } from './fix/unify-rules.js';
 import { normalizeAgentFilter } from './scan/agent-map.js';
 import {
   EXIT_CONTRADICTIONS,
@@ -33,6 +34,8 @@ function parseCliOptions(argv: string[]): CliOptions {
       'local-only': { type: 'boolean', default: false },
       symlink: { type: 'boolean', default: false },
       init: { type: 'boolean', default: false },
+      unify: { type: 'boolean', default: false },
+      badge: { type: 'boolean', default: false },
       'audit-deps': { type: 'boolean', default: false },
       yes: { type: 'boolean', short: 'y', default: false },
       verbose: { type: 'boolean', short: 'v', default: false },
@@ -55,6 +58,8 @@ Options:
   --local-only    Scan only project files, skip global home configs
   --symlink       Replace tool-specific rule files with symlinks to AGENTS.md
   --init          Initialize AGENTS.md and link all agent tools
+  --unify         Merge all local agent files into AGENTS.md and symlink tools
+  --badge         Output markdown/HTML badge for your project README
   --audit-deps    Audit rules against installed package.json dependencies
   -y, --yes       Apply recommended fixes without prompts
   -a, --agent     Limit scan to agents: cursor, claude, copilot, shared
@@ -85,6 +90,8 @@ Options:
     localOnly: Boolean(values['local-only']),
     symlink: Boolean(values.symlink),
     init: Boolean(values.init),
+    unify: Boolean(values.unify),
+    badge: Boolean(values.badge),
     auditDeps: Boolean(values['audit-deps']),
     yes: Boolean(values.yes),
     verbose: Boolean(values.verbose),
@@ -101,6 +108,19 @@ export async function runCli(argv: string[]): Promise<number> {
   } catch (error) {
     console.error(pc.red(error instanceof Error ? error.message : String(error)));
     return EXIT_USAGE;
+  }
+
+  if (options.badge) {
+    console.log(pc.cyan('agentchecker — README Badge:\n'));
+    console.log(pc.bold('Markdown:'));
+    console.log(
+      '[![AI Agents Aligned](https://img.shields.io/badge/AI%20Rules-Aligned-00ff41?style=flat-square&logo=git&logoColor=white)](https://github.com/moisesvalero/agentchecker)\n',
+    );
+    console.log(pc.bold('HTML:'));
+    console.log(
+      '<a href="https://github.com/moisesvalero/agentchecker"><img src="https://img.shields.io/badge/AI%20Rules-Aligned-00ff41?style=flat-square&logo=git&logoColor=white" alt="AI Agents Aligned" /></a>\n',
+    );
+    return EXIT_OK;
   }
 
   if (options.init) {
@@ -145,6 +165,31 @@ export async function runCli(argv: string[]): Promise<number> {
   } else {
     files = await scanProject(options.cwd, options.agents, !options.localOnly);
     console.log(renderFoundFiles(files));
+  }
+
+  if (options.unify) {
+    console.log(pc.cyan('\nUnifying all agent files into AGENTS.md:'));
+    const { mergedFiles, symlinks } = unifyAgentFiles(files, options.cwd);
+    for (const file of mergedFiles) {
+      console.log(`  ${pc.green('✓')} Merged rules from ${file}`);
+    }
+    for (const res of symlinks) {
+      if (res.symlinkCreated) {
+        console.log(
+          `  ${pc.green('✓')} Symlinked ${path.relative(options.cwd, res.targetPath)} -> AGENTS.md`,
+        );
+      } else {
+        console.log(
+          `  ${pc.red('✗')} Failed to symlink ${path.relative(options.cwd, res.targetPath)}: ${res.error}`,
+        );
+      }
+    }
+    console.log(
+      pc.green(
+        `\n✓ Unified into AGENTS.md and symlinked ${symlinks.length} agent files! (Done in ${((Date.now() - started) / 1000).toFixed(1)}s)`,
+      ),
+    );
+    return EXIT_OK;
   }
 
   if (files.length === 0) {

@@ -109,5 +109,28 @@ export function auditDependencies(facts: Fact[], projectDir: string): AuditMisma
     }
   }
 
+  // 4. Audit Test Runner
+  const testFacts = categoryFacts.get('test-runner') || [];
+  for (const fact of testFacts) {
+    const val = fact.value.toLowerCase();
+    if (val === 'jest' && !allDeps['jest'] && allDeps['vitest']) {
+      mismatches.push({
+        category: 'test-runner',
+        ruleValue: 'jest',
+        expectedDependency: 'vitest',
+        files: [fact.filePath],
+        message: `Rule specifies 'jest', but project has 'vitest' installed in package.json.`,
+      });
+    } else if (val === 'vitest' && !allDeps['vitest'] && allDeps['jest']) {
+      mismatches.push({
+        category: 'test-runner',
+        ruleValue: 'vitest',
+        expectedDependency: 'jest',
+        files: [fact.filePath],
+        message: `Rule specifies 'vitest', but project has 'jest' installed in package.json.`,
+      });
+    }
+  }
+
   return mismatches;
 }

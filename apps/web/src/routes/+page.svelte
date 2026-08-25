@@ -42,7 +42,7 @@
         ciDocs: 'GitHub Action in README',
         ciSnippet: 'uses: moisesvalero/agentchecker@main',
         paths: [
-          'AGENTS.md · npx agentchecker --init',
+          'AGENTS.md · npx agentchecker --unify',
           'CLAUDE.md · .claude/CLAUDE.md',
           '.cursor/rules/*.mdc · .cursorrules',
           '.github/copilot-instructions.md',
@@ -81,7 +81,7 @@
         ciDocs: 'Configuración de Action en README',
         ciSnippet: 'uses: moisesvalero/agentchecker@main',
         paths: [
-          'AGENTS.md · npx agentchecker --init',
+          'AGENTS.md · npx agentchecker --unify',
           'CLAUDE.md · .claude/CLAUDE.md',
           '.cursor/rules/*.mdc · .cursorrules',
           '.github/copilot-instructions.md',
