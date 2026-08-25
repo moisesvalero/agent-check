@@ -105,29 +105,30 @@ npx agentchecker --check-only --local-only
 
 _It will scan project files and exit with code `1` if any contradiction exists, halting the commit. Omit `--local-only` to also include global tool configs from your home directory._
 
-#### 2. CI/CD Pipeline (GitHub Actions)
+#### 2. CI/CD Pipeline (GitHub Actions Official Action)
 
-Ensure team pull requests don't introduce conflicting rules. This repo uses [`.github/workflows/ci.yml`](.github/workflows/ci.yml) with a dedicated `agent-check` job:
+Ensure team pull requests don't introduce conflicting rules using the official GitHub Action:
 
 ```yaml
 name: AI Agent Rules Check
 on: [push, pull_request]
 
 jobs:
-  audit:
+  agent-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: moisesvalero/agentchecker@main
         with:
-          version: 10
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-      - run: pnpm install
-      - run: pnpm --filter agentchecker build
-      - run: node packages/cli/dist/cli.js --check-only --local-only
+          check-only: 'true'
+          local-only: 'true'
+          audit-deps: 'true'
+```
+
+Alternatively, run directly with `npx`:
+
+```bash
+npx agentchecker --check-only --local-only
 ```
 
 Use `--local-only` in CI so builds only validate repository files, not each developer's global home configs.
@@ -155,7 +156,10 @@ Use `--local-only` in CI so builds only validate repository files, not each deve
 - **Package Managers**: `pnpm`, `npm`, `yarn`, `bun`
 - **Linters**: `oxlint`, `eslint`, `biome`
 - **Formatters**: `prettier`, `biome`, `dprint`
-- **Test Runners**: `vitest`, `jest`, `playwright`
+- **Test Runners**: `vitest`, `jest`, `playwright`, `cypress`
+- **Package Runners**: `npx`, `pnpm dlx`, `bunx`, `yarn dlx`
+- **Languages**: `spanish` / `español`, `english` / `inglés`
+- **Shell Environments**: `wsl`, `wsl2`, `windows`, `macos`, `linux`
 
 #### Request support for a new agent
 
@@ -177,7 +181,23 @@ PRs welcome: add patterns in [`packages/cli/src/scan/known-files.ts`](packages/c
 ### Command Line Options
 
 ```bash
-agentchecker: fix contradictions between AI agent instruction files
+agentchecker — fix contradictions between AI agent instruction files
+
+Usage:
+  npx agentchecker [options]
+
+Options:
+  --dry-run       Show contradictions and preview without writing
+  --check-only    Exit 1 if contradictions exist (CI mode)
+  --local-only    Scan only project files, skip global home configs
+  --symlink       Replace tool-specific rule files with symlinks to AGENTS.md
+  --init          Initialize AGENTS.md and link all agent tools
+  --audit-deps    Audit rules against installed package.json dependencies
+  -y, --yes       Apply recommended fixes without prompts
+  -a, --agent     Limit scan to agents: cursor, claude, copilot, shared
+  --project-dir   Project directory to scan (default: cwd)
+  -v, --verbose   Verbose output
+  -h, --help      Show help
 
 Usage:
   npx agentchecker [options]
@@ -302,27 +322,28 @@ _Si se detecta una contradicción en los archivos del proyecto, la herramienta s
 
 #### 2. Pipeline de Integración Continua (GitHub Actions)
 
-Garantiza que ningún pull request introduzca reglas conflictivas. Este repositorio usa [`.github/workflows/ci.yml`](.github/workflows/ci.yml) con un job `agent-check` dedicado:
+Garantiza que ningún pull request introduzca reglas conflictivas usando la GitHub Action oficial:
 
 ```yaml
 name: AI Agent Rules Check
 on: [push, pull_request]
 
 jobs:
-  audit:
+  agent-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: moisesvalero/agentchecker@main
         with:
-          version: 10
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-      - run: pnpm install
-      - run: pnpm --filter agentchecker build
-      - run: node packages/cli/dist/cli.js --check-only --local-only
+          check-only: 'true'
+          local-only: 'true'
+          audit-deps: 'true'
+```
+
+O ejecutándolo directamente con `npx`:
+
+```bash
+npx agentchecker --check-only --local-only
 ```
 
 Usa `--local-only` en CI para validar solo los archivos del repositorio, no las configuraciones globales de cada desarrollador.
@@ -350,7 +371,10 @@ Usa `--local-only` en CI para validar solo los archivos del repositorio, no las 
 - **Gestores de paquetes**: `pnpm`, `npm`, `yarn`, `bun`
 - **Linters**: `oxlint`, `eslint`, `biome`
 - **Formateadores**: `prettier`, `biome`, `dprint`
-- **Test Runners**: `vitest`, `jest`, `playwright`
+- **Test Runners**: `vitest`, `jest`, `playwright`, `cypress`
+- **Package Runners**: `npx`, `pnpm dlx`, `bunx`, `yarn dlx`
+- **Idiomas de respuesta**: `spanish` / `español`, `english` / `inglés`
+- **Entornos de Shell**: `wsl`, `wsl2`, `windows`, `macos`, `linux`
 
 #### Solicitar soporte para un agente nuevo
 
@@ -372,7 +396,7 @@ PRs bienvenidos: patrones en [`packages/cli/src/scan/known-files.ts`](packages/c
 ### Parámetros de Consola (Flags)
 
 ```bash
-agentchecker: fix contradictions between AI agent instruction files
+agentchecker — fix contradictions between AI agent instruction files
 
 Uso:
   npx agentchecker [opciones]
@@ -382,6 +406,7 @@ Opciones:
   --check-only    Sale con código 1 si existen contradicciones (modo CI)
   --local-only    Escanea solo archivos del proyecto, sin configs globales del home
   --symlink       Reemplaza archivos propietarios por symlinks apuntando a AGENTS.md
+  --init          Inicializa AGENTS.md y enlaza todas las herramientas
   --audit-deps    Audita reglas contra las dependencias instaladas en package.json
   -y, --yes       Aplica las soluciones recomendadas de forma automática
   -a, --agent     Limita el análisis a: cursor, claude, copilot, shared

@@ -47,7 +47,12 @@ export const faqsEn: FaqItem[] = [
   {
     question: 'How do I run agentchecker?',
     answer:
-      "Run agentchecker without installation using npx: open a terminal in your project root and run 'npx agentchecker'. No configuration files or global installation required.",
+      "Run agentchecker without installation using npx: open a terminal in your project root and run 'npx agentchecker'. You can also run 'npx agentchecker --init' to generate a unified AGENTS.md and link all agent tools.",
+  },
+  {
+    question: 'Can I use agentchecker in GitHub Actions CI?',
+    answer:
+      "Yes! You can use the official composite action in your workflow: 'uses: moisesvalero/agentchecker@main' or run 'npx agentchecker --check-only --local-only'. It exits with code 1 if rules contradict each other.",
   },
   {
     question: 'What AI agent files does agentchecker support?',
@@ -58,12 +63,12 @@ export const faqsEn: FaqItem[] = [
     question:
       'Can agentchecker symlink rule files to AGENTS.md or audit package.json?',
     answer:
-      "Yes! In v0.2.0+, run 'npx agentchecker --symlink' to replace tool-specific rules with relative symlinks to AGENTS.md. Run 'npx agentchecker --audit-deps' to audit rule claims against installed package.json dependencies and lockfiles.",
+      "Yes! Run 'npx agentchecker --symlink' to replace tool-specific rules with relative symlinks to AGENTS.md. Run 'npx agentchecker --audit-deps' to audit rule claims against installed package.json dependencies and lockfiles.",
   },
   {
     question: 'What contradictions does agentchecker detect?',
     answer:
-      'agentchecker detects contradictions in six categories: package manager (pnpm vs npm vs yarn vs bun), linter (oxlint vs eslint vs biome), formatter (prettier vs biome vs dprint), test runner (vitest vs jest), shell environment (WSL2 vs Windows vs macOS), and package runner (npx vs pnpm dlx vs bunx).',
+      'agentchecker detects contradictions across 7 categories: package manager (pnpm vs npm vs yarn vs bun), linter (oxlint vs eslint vs biome), formatter (prettier vs biome vs dprint), test runner (vitest vs jest vs playwright vs cypress), response language (spanish vs english), shell environment (WSL2 vs Windows vs macOS), and package runner (npx vs pnpm dlx vs bunx). It also intelligently ignores negated rules (e.g. "never use npm").',
   },
   {
     question: 'Does agentchecker modify global AI tool configuration files?',
@@ -73,7 +78,7 @@ export const faqsEn: FaqItem[] = [
   {
     question: 'Is agentchecker free?',
     answer:
-      'Yes, agentchecker is completely free and open source. Run it instantly with npx agentchecker — no installation, no account, no configuration required.',
+      'Yes, agentchecker is completely free and open source under the MIT License.',
   },
 ];
 
@@ -86,7 +91,12 @@ export const faqsEs: FaqItem[] = [
   {
     question: '¿Cómo ejecuto agentchecker?',
     answer:
-      "Ejecuta agentchecker sin instalar nada con npx: abre una terminal en la raíz de tu proyecto y ejecuta 'npx agentchecker'. No requiere configuración ni instalación global.",
+      "Ejecuta agentchecker sin instalar nada con npx: abre una terminal en la raíz de tu proyecto y ejecuta 'npx agentchecker'. También puedes usar 'npx agentchecker --init' para inicializar un AGENTS.md canónico y enlazar todas tus herramientas.",
+  },
+  {
+    question: '¿Puedo usar agentchecker en el CI de GitHub Actions?',
+    answer:
+      "¡Sí! Puedes usar la GitHub Action oficial en tu workflow: 'uses: moisesvalero/agentchecker@main' o ejecutar 'npx agentchecker --check-only --local-only'. Saldrá con código 1 si detecta reglas contradictorias en el PR.",
   },
   {
     question: '¿Qué archivos de agentes IA soporta agentchecker?',
@@ -97,12 +107,12 @@ export const faqsEs: FaqItem[] = [
     question:
       '¿Puede agentchecker crear symlinks a AGENTS.md o auditar el package.json?',
     answer:
-      "¡Sí! En v0.2.0+, ejecuta 'npx agentchecker --symlink' para reemplazar reglas propietarias con enlaces simbólicos hacia AGENTS.md. Ejecuta 'npx agentchecker --audit-deps' para comprobar si las reglas coinciden con las dependencias instaladas en tu package.json.",
+      "¡Sí! Ejecuta 'npx agentchecker --symlink' para reemplazar reglas propietarias con enlaces simbólicos hacia AGENTS.md. Ejecuta 'npx agentchecker --audit-deps' para comprobar si las reglas coinciden con las dependencias instaladas en tu package.json.",
   },
   {
     question: '¿Qué contradicciones detecta agentchecker?',
     answer:
-      'agentchecker detecta contradicciones en seis categorías: gestor de paquetes (pnpm vs npm vs yarn vs bun), linter (oxlint vs eslint vs biome), formateador (prettier vs biome vs dprint), test runner (vitest vs jest), entorno shell (WSL2 vs Windows vs macOS) y ejecutor de paquetes (npx vs pnpm dlx vs bunx).',
+      'agentchecker detecta contradicciones en 7 categorías: gestor de paquetes (pnpm vs npm vs yarn vs bun), linter (oxlint vs eslint vs biome), formateador (prettier vs biome vs dprint), test runner (vitest vs jest vs playwright vs cypress), idioma de respuesta (español vs inglés), entorno shell (WSL2 vs Windows vs macOS) y ejecutor de paquetes (npx vs pnpm dlx vs bunx). Además, ignora de forma inteligente reglas negadas (ej. "nunca uses npm").',
   },
   {
     question: '¿agentchecker modifica archivos globales de herramientas IA?',
@@ -112,7 +122,7 @@ export const faqsEs: FaqItem[] = [
   {
     question: '¿agentchecker es gratuito?',
     answer:
-      'Sí, agentchecker es completamente gratuito y de código abierto. Ejecútalo al instante con npx agentchecker: sin instalación, sin cuenta y sin configuración.',
+      'Sí, agentchecker es completamente gratuito y de código abierto bajo licencia MIT.',
   },
 ];
 

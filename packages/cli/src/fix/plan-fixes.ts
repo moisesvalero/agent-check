@@ -44,35 +44,38 @@ export function planFixes(
 ): FileChange[] {
   const changes: FileChange[] = [];
 
-  for (const contradiction of contradictions) {
-    const losers = contradiction.values
-      .map((entry) => entry.value)
-      .filter((value) => value !== contradiction.chosen);
+  for (const [filePath, content] of fileContents) {
+    const lines = content.split('\n');
 
-    for (const [filePath, content] of fileContents) {
-      const fileHasLoser = contradiction.values.some(
-        (entry) => entry.value !== contradiction.chosen && entry.files.includes(filePath),
-      );
-      if (!fileHasLoser) continue;
+    for (let i = 0; i < lines.length; i++) {
+      const originalLine = lines[i];
+      let currentLine = originalLine;
 
-      const lines = content.split('\n');
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const updated = replaceLosersOnLine(
-          line,
+      for (const contradiction of contradictions) {
+        const fileHasLoser = contradiction.values.some(
+          (entry) => entry.value !== contradiction.chosen && entry.files.includes(filePath),
+        );
+        if (!fileHasLoser) continue;
+
+        const losers = contradiction.values
+          .map((entry) => entry.value)
+          .filter((value) => value !== contradiction.chosen);
+
+        currentLine = replaceLosersOnLine(
+          currentLine,
           losers,
           contradiction.chosen,
           contradiction.category,
         );
+      }
 
-        if (updated !== line) {
-          changes.push({
-            filePath,
-            line: i + 1,
-            oldText: line,
-            newText: updated,
-          });
-        }
+      if (currentLine !== originalLine) {
+        changes.push({
+          filePath,
+          line: i + 1,
+          oldText: originalLine,
+          newText: currentLine,
+        });
       }
     }
   }

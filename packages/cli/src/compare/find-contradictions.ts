@@ -36,6 +36,12 @@ const INCOMPATIBLE: Partial<Record<FactCategory, string[][]>> = {
     ['pnpm dlx', 'bunx'],
     ['pnpm dlx', 'yarn dlx'],
   ],
+  language: [
+    ['spanish', 'english'],
+    ['español', 'english'],
+    ['spanish', 'inglés'],
+    ['español', 'inglés'],
+  ],
 };
 
 function valuesConflict(category: FactCategory, a: string, b: string): boolean {

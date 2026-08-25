@@ -4,51 +4,100 @@ import { getLines } from './normalize-markdown.js';
 type CheckDefinition = {
   category: FactCategory;
   values: string[];
-  patterns: RegExp[];
 };
+
+const NEGATION_WORDS =
+  /\b(?:never|not|don't|dont|do\s+not|avoid|forbidden|deprecated|nunca|jam[aá]s|evitar|prohibid[oa]s?|sin|no\s+(?:use|uses|usar|run|install|ejecutar))\b/i;
+const AFFIRMATIVE_RESET = /\b(?:always|siempre|instead|en\s+cambio|pero|prefer|prefier[a-z]*)\b/i;
+
+function isMatchNegated(line: string, matchIndex: number): boolean {
+  const prefix = line.slice(0, matchIndex);
+
+  // Caso 1: Dentro de un paréntesis (ej. (never npm, yarn, or bun))
+  const openParen = prefix.lastIndexOf('(');
+  const closeParen = prefix.lastIndexOf(')');
+  if (openParen > closeParen) {
+    const insideParen = prefix.slice(openParen + 1);
+    return NEGATION_WORDS.test(insideParen);
+  }
+
+  // Caso 2: Fuera de paréntesis - buscar la última cláusula
+  const clauseStart = Math.max(
+    prefix.lastIndexOf('.'),
+    prefix.lastIndexOf(';'),
+    prefix.lastIndexOf(','),
+    prefix.lastIndexOf('|'),
+    prefix.lastIndexOf(':'),
+    0,
+  );
+  const clause = prefix.slice(clauseStart);
+
+  if (NEGATION_WORDS.test(clause)) {
+    // Si dentro de la misma cláusula aparece una palabra afirmativa tras la negación, ya no está negado
+    const negationMatch = NEGATION_WORDS.exec(clause);
+    if (negationMatch) {
+      const afterNegation = clause.slice(negationMatch.index + negationMatch[0].length);
+      if (AFFIRMATIVE_RESET.test(afterNegation)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  return false;
+}
+
+const LANGUAGE_DIRECTIVE =
+  /\b(?:language|idioma|respond|responde|response|output|habla|speak|always\s+in|siempre\s+en)\b/i;
 
 const CHECK_DEFINITIONS: CheckDefinition[] = [
   {
     category: 'package-manager',
     values: ['pnpm', 'npm', 'yarn', 'bun'],
-    patterns: [/\bpnpm\b/i, /\bnpm\b/i, /\byarn\b/i, /\bbun\b/i],
   },
   {
     category: 'linter',
     values: ['oxlint', 'eslint', 'biome'],
-    patterns: [/\boxlint\b/i, /\beslint\b/i, /\bbiome\b/i],
   },
   {
     category: 'formatter',
     values: ['prettier', 'biome', 'dprint'],
-    patterns: [/\bprettier\b/i, /\bbiome\b/i, /\bdprint\b/i],
   },
   {
     category: 'test-runner',
-    values: ['vitest', 'jest', 'playwright'],
-    patterns: [/\bvitest\b/i, /\bjest\b/i, /\bplaywright\b/i],
+    values: ['vitest', 'jest', 'playwright', 'cypress'],
   },
   {
     category: 'shell-environment',
     values: ['wsl', 'wsl2', 'windows', 'macos', 'linux'],
-    patterns: [/\bwsl2\b/i, /\bwsl\b/i, /\bwindows\b/i, /\bmacos\b/i, /\blinux\b/i],
   },
   {
     category: 'package-runner',
     values: ['npx', 'pnpm dlx', 'bunx', 'yarn dlx'],
-    patterns: [/\bnpx\b/i, /\bpnpm\s+dlx\b/i, /\bbunx\b/i, /\byarn\s+dlx\b/i],
+  },
+  {
+    category: 'language',
+    values: ['spanish', 'english', 'español', 'inglés'],
   },
 ];
 
-function detectValueOnLine(line: string, def: CheckDefinition): string | null {
-  const lower = line.toLowerCase();
+function detectValuesOnLine(line: string, def: CheckDefinition): string[] {
+  if (def.category === 'language' && !LANGUAGE_DIRECTIVE.test(line)) {
+    return [];
+  }
+
+  const found: string[] = [];
   for (const value of def.values) {
-    if (lower.includes(value)) {
-      const pattern = new RegExp(`\\b${value}\\b`, 'i');
-      if (pattern.test(line)) return value;
+    const regex = new RegExp(`\\b${value}\\b`, 'gi');
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(line)) !== null) {
+      if (!isMatchNegated(line, match.index)) {
+        found.push(value.toLowerCase());
+        break; // Un match positivo por valor en la línea
+      }
     }
   }
-  return null;
+  return found;
 }
 
 function extractFactsFromFile(file: AgentFile): Fact[] {
@@ -60,25 +109,25 @@ function extractFactsFromFile(file: AgentFile): Fact[] {
       const line = lines[i];
       if (!line.trim() || line.trim().startsWith('```')) continue;
 
-      const value = detectValueOnLine(line, def);
-      if (!value) continue;
+      const values = detectValuesOnLine(line, def);
+      for (const value of values) {
+        const duplicate = facts.some(
+          (fact) =>
+            fact.category === def.category &&
+            fact.value === value &&
+            fact.filePath === file.path &&
+            fact.line === i + 1,
+        );
+        if (duplicate) continue;
 
-      const duplicate = facts.some(
-        (fact) =>
-          fact.category === def.category &&
-          fact.value === value &&
-          fact.filePath === file.path &&
-          fact.line === i + 1,
-      );
-      if (duplicate) continue;
-
-      facts.push({
-        category: def.category,
-        value,
-        filePath: file.path,
-        line: i + 1,
-        evidence: line.trim(),
-      });
+        facts.push({
+          category: def.category,
+          value,
+          filePath: file.path,
+          line: i + 1,
+          evidence: line.trim(),
+        });
+      }
     }
   }
 

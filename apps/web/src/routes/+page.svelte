@@ -29,7 +29,7 @@
       status: `v${pkgVersion} on npm`,
       terminalSkip: 'Skip demo',
       heroSubtitle:
-        'Scans AGENTS.md, CLAUDE.md, Cursor rules, and Copilot instructions in one command. Surfaces package manager, linter, and formatter conflicts in under 2 seconds.',
+        'Scans AGENTS.md, CLAUDE.md, Cursor rules, and Copilot instructions in one command. Surfaces package manager, linter, language, and formatter conflicts in under 2 seconds.',
       cta: { github: 'VIEW ON GITHUB', docs: 'DOCUMENTATION' },
       install: 'QUICK INSTALL',
       copyLabel: 'Copy install command',
@@ -37,12 +37,12 @@
       copyFail: 'Copy failed. Select the command manually.',
       specs: {
         agentsTitle: 'Scanned agent paths',
-        ciTitle: 'CI check',
+        ciTitle: 'Official GitHub Action & CI',
         ciHint: 'Fails the workflow when project rules disagree:',
-        ciDocs: 'CI setup in README',
-        ciSnippet: 'npx agentchecker --check-only --local-only',
+        ciDocs: 'GitHub Action in README',
+        ciSnippet: 'uses: moisesvalero/agentchecker@main',
         paths: [
-          'AGENTS.md',
+          'AGENTS.md · npx agentchecker --init',
           'CLAUDE.md · .claude/CLAUDE.md',
           '.cursor/rules/*.mdc · .cursorrules',
           '.github/copilot-instructions.md',
@@ -68,7 +68,7 @@
       status: `v${pkgVersion} en npm`,
       terminalSkip: 'Saltar demo',
       heroSubtitle:
-        'Escanea AGENTS.md, CLAUDE.md, reglas de Cursor e instrucciones de Copilot en un comando. Detecta conflictos de gestor, linter y formateador en menos de 2 segundos.',
+        'Escanea AGENTS.md, CLAUDE.md, reglas de Cursor e instrucciones de Copilot en un comando. Detecta conflictos de gestor, linter, idioma y formateador en menos de 2 segundos.',
       cta: { github: 'VER EN GITHUB', docs: 'DOCUMENTACIÓN' },
       install: 'INSTALACIÓN RÁPIDA',
       copyLabel: 'Copiar comando de instalación',
@@ -76,12 +76,12 @@
       copyFail: 'No se pudo copiar. Selecciona el comando manualmente.',
       specs: {
         agentsTitle: 'Rutas de agentes escaneadas',
-        ciTitle: 'Check en CI',
+        ciTitle: 'GitHub Action Oficial & CI',
         ciHint: 'Falla el workflow si las reglas del proyecto no coinciden:',
-        ciDocs: 'Configuración CI en README',
-        ciSnippet: 'npx agentchecker --check-only --local-only',
+        ciDocs: 'Configuración de Action en README',
+        ciSnippet: 'uses: moisesvalero/agentchecker@main',
         paths: [
-          'AGENTS.md',
+          'AGENTS.md · npx agentchecker --init',
           'CLAUDE.md · .claude/CLAUDE.md',
           '.cursor/rules/*.mdc · .cursorrules',
           '.github/copilot-instructions.md',

@@ -1,0 +1,46 @@
+name: 'Agentchecker CI'
+description: 'Detect and resolve contradictions between AI agent instruction files (AGENTS.md, CLAUDE.md, Cursor, Copilot)'
+author: 'Moisés Valero'
+branding:
+  icon: 'check-circle'
+  color: 'green'
+
+inputs:
+  project-dir:
+    description: 'Project directory to scan'
+    required: false
+    default: '.'
+  local-only:
+    description: 'Scan only local workspace files, skipping global home configs'
+    required: false
+    default: 'true'
+  check-only:
+    description: 'Exit with status 1 if contradictions exist (CI mode)'
+    required: false
+    default: 'true'
+  audit-deps:
+    description: 'Audit instruction rules against package.json dependencies'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run agentchecker
+      shell: bash
+      run: |
+        CMD="npx --yes agentchecker@latest"
+        if [ "${{ inputs.check-only }}" = "true" ]; then
+          CMD="$CMD --check-only"
+        fi
+        if [ "${{ inputs.local-only }}" = "true" ]; then
+          CMD="$CMD --local-only"
+        fi
+        if [ "${{ inputs.audit-deps }}" = "true" ]; then
+          CMD="$CMD --audit-deps"
+        fi
+        if [ -n "${{ inputs.project-dir }}" ] && [ "${{ inputs.project-dir }}" != "." ]; then
+          CMD="$CMD --project-dir ${{ inputs.project-dir }}"
+        fi
+        echo "Running: $CMD"
+        $CMD

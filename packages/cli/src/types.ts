@@ -4,7 +4,8 @@ export type FactCategory =
   | 'formatter'
   | 'test-runner'
   | 'shell-environment'
-  | 'package-runner';
+  | 'package-runner'
+  | 'language';
 
 export type AgentId =
   | 'shared'
@@ -70,6 +71,7 @@ export type CliOptions = {
   verbose: boolean;
   agents: AgentId[] | null;
   symlink: boolean;
+  init: boolean;
   auditDeps: boolean;
 };
 
@@ -85,4 +87,5 @@ export const CATEGORY_LABELS: Record<FactCategory, string> = {
   'test-runner': 'Test runner',
   'shell-environment': 'Shell environment',
   'package-runner': 'Package runner',
+  language: 'Response language',
 };
