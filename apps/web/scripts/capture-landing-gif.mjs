@@ -27,7 +27,9 @@ const context = await browser.newContext({
 });
 const page = await context.newPage();
 await page.goto(`${baseUrl}/`);
-await page.evaluate(() => localStorage.removeItem('agentchecker-terminal-seen'));
+await page.evaluate(() =>
+  localStorage.removeItem('agentchecker-terminal-seen'),
+);
 await page.reload({ waitUntil: 'networkidle' });
 
 const hero = page.locator('.terminal');
@@ -36,7 +38,10 @@ await hero.waitFor({ state: 'visible' });
 const frameCount = 20;
 const frameDelayMs = 180;
 for (let i = 0; i < frameCount; i += 1) {
-  const framePath = path.join(framesDir, `frame-${String(i).padStart(3, '0')}.png`);
+  const framePath = path.join(
+    framesDir,
+    `frame-${String(i).padStart(3, '0')}.png`,
+  );
   await hero.screenshot({ path: framePath });
   await page.waitForTimeout(frameDelayMs);
 }

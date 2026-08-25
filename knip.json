@@ -1,10 +1,10 @@
 {
-  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "$schema": "https://unpkg.com/knip@6/schema.json",
   "ignoreDependencies": ["lint-staged"],
+  "ignoreBinaries": ["ffmpeg"],
   "ignoreExportsUsedInFile": true,
   "workspaces": {
     "packages/cli": {
-      "entry": ["src/cli.ts"],
       "project": ["src/**/*.ts", "tests/**/*.ts"]
     },
     "apps/web": {
